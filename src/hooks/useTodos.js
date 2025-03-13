@@ -5,7 +5,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   return (
     <div>
-      <p>텍스트</p>
+      <p>테스트</p>
     </div>
   );
 }
