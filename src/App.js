@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import styled, { ThemeProvider } from "styled-components";
+import theme, { GlobalStyles } from "./styles/theme";
+import Button from "./components/Button";
+import Filter from "./components/Filter";
+import Input from "./components/Input";
+import TodoItem from "./components/TodoItem";
+import TodoList from "./components/TodoList";
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.theme.spacing.small};
+  margin: ${(props) => props.theme.spacing.large} 0;
+`;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <div
+        style={{
+          textAlign: "center",
+          maxWidth: "800px",
+          minWidth: "375px",
+          margin: "auto",
+        }}
+      >
+        <h1>TODO LIST</h1>
+        <InputContainer>
+          <Input placeholder="할 일을 입력하세요" />
+          <Button>추가</Button>
+        </InputContainer>
+        <Filter />
+      </div>
+    </ThemeProvider>
   );
 }
 
