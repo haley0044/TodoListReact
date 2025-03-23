@@ -1,10 +1,11 @@
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import theme, { GlobalStyles } from "./styles/theme";
 import Button from "./components/Button";
-import Filter from "./components/Filter";
 import Input from "./components/Input";
-import TodoItem from "./components/TodoItem";
 import TodoList from "./components/TodoList";
+import Filter from "./components/Filter";
+import styled from "styled-components";
+import { useTodos } from "./hooks/useTodos";
 
 const InputContainer = styled.div`
   display: flex;
@@ -14,6 +15,20 @@ const InputContainer = styled.div`
 `;
 
 function App() {
+  const {
+    todos,
+    inputValue,
+    setInputValue,
+    isComposing,
+    setIsComposing,
+    filter,
+    setFilter,
+    addTodo,
+    toggleComplete,
+    removeTodo,
+    clearCompleted,
+  } = useTodos(); // ✅ 상태 로직을 useTodos()에서 가져옴
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -25,12 +40,35 @@ function App() {
           margin: "auto",
         }}
       >
-        <h1>TODO LIST</h1>
+        <h1>🚀 TODO LIST</h1>
+
         <InputContainer>
-          <Input placeholder="할 일을 입력하세요" />
-          <Button>추가</Button>
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !isComposing) {
+                e.preventDefault();
+                addTodo();
+              }
+            }}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+            placeholder="할 일을 입력하세요"
+          />
+          <Button onClick={addTodo}>추가</Button>
         </InputContainer>
-        <Filter />
+
+        <Filter
+          filter={filter}
+          setFilter={setFilter}
+          clearCompleted={clearCompleted}
+        />
+        <TodoList
+          todos={todos}
+          toggleComplete={toggleComplete}
+          removeTodo={removeTodo}
+        />
       </div>
     </ThemeProvider>
   );

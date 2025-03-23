@@ -1,24 +1,55 @@
 import { useState } from "react";
 
-// useState()로 todos 상태 기능
-function App() {
+export function useTodos() {
   const [todos, setTodos] = useState([]);
-  return (
-    <div>
-      <p>테스트</p>
-    </div>
-  );
+  const [inputValue, setInputValue] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
+  const [filter, setFilter] = useState("all");
+
+  const addTodo = () => {
+    const trimmedValue = inputValue.trim();
+    if (trimmedValue) {
+      setTodos((prevTodos) => [
+        ...prevTodos,
+        { id: Date.now(), text: trimmedValue, completed: false },
+      ]);
+      setInputValue("");
+    }
+  };
+
+  const toggleComplete = (id) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  const removeTodo = (id) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  };
+
+  const clearCompleted = () => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => !todo.completed));
+  };
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "active") return !todo.completed;
+    if (filter === "completed") return todo.completed;
+    return true;
+  });
+
+  return {
+    todos: filteredTodos,
+    inputValue,
+    setInputValue,
+    isComposing,
+    setIsComposing,
+    filter,
+    setFilter,
+    addTodo,
+    toggleComplete,
+    removeTodo,
+    clearCompleted,
+  };
 }
-
-export default App;
-
-// 할 일 추가 기능 (addTodo)
-// 할 일 완료/미완료 변경 (toggleComplete)
-// 할 일 삭제 기능 (removeTodo)
-// UI를 만들고 TodoList 컴포넌트에 연결
-
-//---
-// 필터 상태 추가 (useState(filter))
-// todos를 필터링해서 보여주기
-// "전체 / 진행 중 / 완료" 버튼 추가 & 기능 연결
-// "완료된 항목 삭제" 버튼 추가

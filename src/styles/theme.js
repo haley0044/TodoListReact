@@ -25,7 +25,7 @@ const theme = {
   borderRadius: "8px",
 };
 
-// 글로벌 스타일
+// 🖌 글로벌 스타일 포함 (기존 GlobalStyles.js)
 export const GlobalStyles = createGlobalStyle`
   * {
     margin: 0;
